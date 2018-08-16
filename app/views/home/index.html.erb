@@ -3,11 +3,53 @@
     <div class="col">
       
     </div>
-    <div class="col">
-      
+    <div class="col-8">
+      <small>Page feed</small>
+      <% @page_posts.each do |post|%>
+        <div class="card mt-2">
+          <div class="card-header">
+            <%= post["created_time"]%>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><%= truncate(post["message"],length: 200)%></h5>
+            <p class="card-text"></p>
+            <a href="#" class="btn btn-primary">view</a>
+          </div>
+        </div>
+      <%end%>  
     </div>
     <div class="col">
-      
+      <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#new_post_modal">
+        Launch demo modal
+      </button>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="new_post_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Post to page</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <form action="/page_post" method="post" class="col-12">
+            <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
+            <div class="form-group">
+              <label>Message:</label>
+              <textarea name="message"  rows="10" class="form-control" placeholder="Type here.."></textarea>
+            </div>
+            <input type="submit" value="Post" class="btn btn-primary">
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
