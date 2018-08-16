@@ -11,6 +11,11 @@ class KoalaService
     Koala::Facebook::API.new(access_token)
   end
 
+  def page_graph_from_id(page_id)
+    page_token = @graph.get_page_access_token(page_id)
+    page_graph(page_token)
+  end
+
   def page_feed(graph = page_graph)
     graph.get_connection("me","feed")
   end

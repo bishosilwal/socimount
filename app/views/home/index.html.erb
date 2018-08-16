@@ -1,7 +1,17 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col">
-      
+      <form>
+        <div class="form-group mt-4">
+          <h4>Filter Page:</h4>
+        </div>
+        <% @pages.each do |page|%>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="page_token" id="inlineRadio1" value="<%= page['id']%>">
+            <label class="form-check-label" for="inlineRadio1"><%= page["name"]%></label>
+          </div>
+        <%end%>  
+      </form>
     </div>
     <div class="col-8">
       <small>Page feed</small>
