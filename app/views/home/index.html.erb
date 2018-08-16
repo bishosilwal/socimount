@@ -13,14 +13,14 @@
           <div class="card-body">
             <h5 class="card-title"><%= truncate(post["message"],length: 200)%></h5>
             <p class="card-text"></p>
-            <a href="#" class="btn btn-primary">view</a>
+            <a href="#" class="btn btn-primary default-color">view</a>
           </div>
         </div>
       <%end%>  
     </div>
     <div class="col">
-      <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#new_post_modal">
-        Launch demo modal
+      <button type="button" class="btn btn-primary mt-4 default-color" data-toggle="modal" data-target="#new_post_modal">
+        New post
       </button>
     </div>
   </div>
@@ -38,12 +38,21 @@
       <div class="modal-body">
         <div class="row">
           <form action="/page_post" method="post" class="col-12">
+            <div class="form-group">
+              <label>Page:</label>
+              <select class="form-control" name="access_token">
+                <option value="">Select Page</option>
+                <% @pages.each do |page|%>
+                  <option value="<%= page['access_token']%>"><%= page["name"]%></option>
+                <%end%>
+              </select>
+            </div>
             <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
             <div class="form-group">
               <label>Message:</label>
               <textarea name="message"  rows="10" class="form-control" placeholder="Type here.."></textarea>
             </div>
-            <input type="submit" value="Post" class="btn btn-primary">
+            <input type="submit" value="Submit" class="btn btn-primary default-color">
           </form>
         </div>
       </div>

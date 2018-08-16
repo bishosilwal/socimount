@@ -7,15 +7,15 @@ class KoalaService
     @pages = graph.get_connection("me","accounts")
   end
 
-  def first_page_graph
-    Koala::Facebook::API.new(@pages.first["access_token"])
+  def page_graph(access_token = @pages.second["access_token"])
+    Koala::Facebook::API.new(access_token)
   end
 
-  def page_feed(graph=first_page_graph)
+  def page_feed(graph = page_graph)
     graph.get_connection("me","feed")
   end
 
-  def page_post(message, page_graph = first_page_graph)
+  def self.page_post(message, page_graph = page_graph)
     page_graph.put_wall_post(message)
   end
 end
