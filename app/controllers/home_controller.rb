@@ -8,8 +8,7 @@ class HomeController < ApplicationController
   end
 
   def page_post
-    page_graph = @koala.page_graph(params[:access_token])
-    KoalaService.page_post(params[:message], page_graph)
+    KoalaService.page_post(post_params,@koala)
     redirect_to :home_index
   end
 
@@ -24,5 +23,9 @@ class HomeController < ApplicationController
 
   def set_koala
     @koala =  KoalaService.new(current_user.token)
+  end
+
+  def post_params
+    params.permit(:access_token, :message, images: [])
   end
 end
