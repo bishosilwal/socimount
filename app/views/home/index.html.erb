@@ -22,7 +22,11 @@
           </div>
           <div class="card-body">
             <h5 class="card-title"><%= truncate(post["message"],length: 200)%></h5>
-            <p class="card-text"></p>
+            <% unless post["image"].nil?%>
+              <%post["image"].each do |src|%>
+                <img src="<%=src%>" width="35%" style="display: inline;">
+              <%end%>
+            <%end%>
             <a href="#" class="btn btn-primary default-color">view</a>
           </div>
         </div>

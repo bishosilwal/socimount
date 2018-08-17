@@ -17,7 +17,25 @@ class KoalaService
   end
 
   def page_feed(graph = page_graph)
-    graph.get_connection("me","feed")
+    posts = graph.get_connection("me","feed")
+    posts.each_with_index do |post,index|
+      attachments = graph.get_connection(post["id"],"attachments") 
+      unless attachments.empty?
+        attachments.each do |attachment|
+          if attachment["subattachments"].nil?
+            posts[index]['image'] = [attachment["media"]["image"]["src"]]
+          else
+            attachment["subattachments"]["data"].each_with_index do |subattachment,index1|
+              if posts[index]["image"].nil?
+                posts[index]["image"] = [subattachment["media"]["image"]["src"]]
+              else
+                 posts[index]["image"] << subattachment["media"]["image"]["src"]
+              end  
+            end
+          end  
+        end
+      end
+    end 
   end
  
   def self.page_post(params, koala)
