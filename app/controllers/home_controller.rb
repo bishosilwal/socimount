@@ -8,6 +8,7 @@ class HomeController < ApplicationController
   end
 
   def page_post
+    # PagePostWorker.perform_in(params[:delay_time].to_time, post_params, @koala)
     KoalaService.page_post(post_params,@koala)
     redirect_to :home_index
   end
