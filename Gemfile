@@ -31,6 +31,8 @@ gem 'bootstrap', '~> 4.1.3' #!!!!!!!!new gem added for bootstrap_setup
 gem 'jquery-rails'      #!!!!!new gem added for jquery
 gem 'omniauth-facebook'
 gem "koala"
+gem 'sidekiq'
+gem "redis", "~> 4.0.2"
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
