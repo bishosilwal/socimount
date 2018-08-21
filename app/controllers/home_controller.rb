@@ -26,7 +26,7 @@ class HomeController < ApplicationController
   private
 
   def set_koala
-    @koala =  KoalaService.new(current_user.token)
+    @koala =  KoalaWrapper.new(current_user.token)
   end
 
   def post_params

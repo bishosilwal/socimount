@@ -1,4 +1,4 @@
-class KoalaService
+class KoalaWrapper
   attr_accessor :user_token, :graph, :pages
 
   def initialize(token)
