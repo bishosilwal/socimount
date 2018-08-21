@@ -51,30 +51,26 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <form action="/page_post" method="post" class="col-12"  enctype="multipart/form-data">
+
+          <%= form_tag("/page_post", method: "post", multipart: true, class: 'col-12') do %>
             <div class="form-group">
-              <label>Page:</label>
-              <select class="form-control" name="access_token">
-                <option value="">Select Page</option>
-                <% @pages.each do |page|%>
-                  <option value="<%= page['access_token']%>"><%= page["name"]%></option>
-                <%end%>
-              </select>
+              <%= label_tag(:access_token, "Page:") %>
+              <%= select_tag "access_token", options_for_select(@pages.collect{|p| [p['name'],p['access_token']]}), prompt: "Select Page", class: 'form-control'%>
             </div>
             <div class="form-group">
               <input id="datetimepicker" type="text" name="delay_time">
             </div>
-            <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
             <div class="form-group">
-              <label>Message:</label>
-              <textarea name="message"  rows="10" class="form-control" placeholder="Type here.."></textarea>
+              <%= label_tag(:message, 'Message:')%>
+              <%= text_area_tag(:message,'', rows: 10, class: 'form-control', placeholder: "Type here...")%>
             </div>
             <div class="form-group">
-              <label for="exampleFormControlFile1">Image:</label>
-              <input type="file" class="form-control-file" id="exampleFormControlFile1" name="images[]" accept="image/*" multiple>
+              <%= label_tag(:choose_file,"Image:")%>
+              <%= file_field_tag('images[]', multiple: true, accept: 'image/*' )%>
             </div>
-            <input type="submit" value="Submit" class="btn btn-primary default-color">
-          </form>
+
+            <%= submit_tag("Submit", class: 'btn btn-primary default-color') %>
+          <% end %>
         </div>
       </div>
       <div class="modal-footer">
