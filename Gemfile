@@ -33,6 +33,7 @@ gem 'omniauth-facebook'
 gem "koala"
 gem 'sidekiq'
 gem "redis", "~> 4.0.2"
+gem 'dotenv-rails'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
