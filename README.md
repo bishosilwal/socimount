@@ -1,24 +1,20 @@
-# README
+# Social Site's page management app
+ Primary focus of this app is to be a single platform for multiple social app page/group management(like: [buffer_link](https://www.buffer.com) ). Till now user can manage post of facebook only ,gradually other social app will also integerated.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Feature Provided by app
+1. Facebook
+* see page feed data with images
+* post in page with multiple image upload support
+* set time to post, which will used to post in social app after time delayed
 
-Things you may want to cover:
+### App Requirement
+* Ruby 2.4.2 
+* Rails 5.2.1
+* Postgresql database 
+* Redis-server
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+#### App Installation
+* Change .env.sample file to .env and update value insde this file(eg: FACEBOOK_APP_ID, FACEBOOK_APP_SECRETE, DATABASE_USERNAME, DATABASE_PASSWORD etc) 
+* Run 'rails db:setup'
+* Run 'rails db:migrate'
+* Run 'rials server'
