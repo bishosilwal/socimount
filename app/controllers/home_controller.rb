@@ -8,8 +8,11 @@ class HomeController < ApplicationController
   end
 
   def page_post
-    # PagePostWorker.perform_in(params[:delay_time].to_time, post_params, @koala)
-    KoalaService.page_post(post_params,@koala)
+    post = Post.create(message: post_params[:message], user: current_user)
+    post_params[:images].each do |image|
+      image = Image.create(image: image, post: post)
+    end
+    PagePostWorker.perform_in(post_params[:delay_time].to_time, post.id, post_params[:access_token], current_user.token)
     redirect_to :home_index
   end
 
@@ -27,6 +30,6 @@ class HomeController < ApplicationController
   end
 
   def post_params
-    params.permit(:access_token, :message, images: [])
+    params.permit(:access_token, :message, :delay_time, images: [])
   end
 end
