@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_koala
+  before_action :set_koala 
 
   def index
     @pages = []
@@ -30,7 +30,7 @@ class HomeController < ApplicationController
   private
 
   def set_koala
-    @koala =  KoalaWrapper.new(current_user.token) unless current_user.token.nil?
+    @koala =  KoalaWrapper.new(current_user.token) unless current_user.provider != "facebook"
   end
 
   def post_params
