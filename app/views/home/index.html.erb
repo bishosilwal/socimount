@@ -33,9 +33,13 @@
       <%end%>  
     </div>
     <div class="col">
-      <button type="button" class="btn btn-primary mt-4 default-color" data-toggle="modal" data-target="#new_post_modal">
-        New post
-      </button>
+      <% if current_user.token.nil?%>
+        <a href="/users/auth/facebook" class="btn btn-primary mt-4 default-color"> Connect Facebook</a>
+      <%else%>
+        <button type="button" class="btn btn-primary mt-4 default-color" data-toggle="modal" data-target="#new_post_modal">
+          New post
+        </button>
+      <%end%>  
     </div>
   </div>
 </div>

@@ -3,8 +3,12 @@ class HomeController < ApplicationController
   before_action :set_koala
 
   def index
-    @pages = @koala.pages
-    @page_posts = @koala.page_feed
+    @pages = []
+    @page_posts = []
+    unless @koala.nil?
+      @pages = @koala.pages
+      @page_posts = @koala.page_feed 
+    end  
   end
 
   def page_post
@@ -26,7 +30,7 @@ class HomeController < ApplicationController
   private
 
   def set_koala
-    @koala =  KoalaWrapper.new(current_user.token)
+    @koala =  KoalaWrapper.new(current_user.token) unless current_user.token.nil?
   end
 
   def post_params
