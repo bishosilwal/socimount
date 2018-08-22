@@ -36,6 +36,7 @@ gem 'sidekiq'
 gem "redis", "~> 4.0.2"
 gem 'dotenv-rails'
 gem "paperclip", "~> 6.0.0"
+gem 'rubocop', require: false
 # gem "twitter"
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'

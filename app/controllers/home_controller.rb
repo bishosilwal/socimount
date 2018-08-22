@@ -1,20 +1,20 @@
 class HomeController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_koala 
+  before_action :set_koala
 
   def index
     @pages = []
     @page_posts = []
     unless @koala.nil?
       @pages = @koala.pages
-      @page_posts = @koala.page_feed 
-    end  
+      @page_posts = @koala.page_feed
+    end
   end
 
   def page_post
     post = Post.create(message: post_params[:message], user: current_user)
     post_params[:images].each do |image|
-      image = Image.create(image: image, post: post)
+      Image.create(image: image, post: post)
     end
     PagePostWorker.perform_in(post_params[:delay_time].to_time, post.id, post_params[:access_token], current_user.token)
     redirect_to :home_index
@@ -30,7 +30,7 @@ class HomeController < ApplicationController
   private
 
   def set_koala
-    @koala =  KoalaWrapper.new(current_user.token) unless current_user.provider != "facebook"
+    @koala = KoalaWrapper.new(current_user.token) unless current_user.provider != 'facebook'
   end
 
   def post_params
