@@ -44,8 +44,9 @@
               <h5 class="card-title"><%= truncate(post.full_text,length: 200)%></h5>
               <% if post.media? %>
                 <% post.media.each do |media|%>
-                  <%= image_tag(media.media_url.to_s)%>
-                  <!-- <img src="<%=media.media_url_https.to_s %>" > -->
+
+                  <%#= image_tag(media.media_url.to_s)%>
+                  <img src="<%=media.media_url_https.to_s %>" >
                 <%end%>
               <%end%>
               <%# post.to_hash[:entities][:media].first[:media_url]%>
@@ -80,10 +81,12 @@
         <div class="row">
 
           <%= form_tag("/page_post", method: "post", multipart: true, class: 'col-12') do %>
-            <div class="form-group">
-              <%= label_tag(:access_token, "Page:") %>
-              <%= select_tag "access_token", options_for_select(@pages.collect{|p| [p['name'],p['access_token']]}), prompt: "Select Page", class: 'form-control'%>
-            </div>
+            <% if current_user.provider == "facebook" %>
+              <div class="form-group">
+                <%= label_tag(:access_token, "Page:") %>
+                <%= select_tag "access_token", options_for_select(@pages.collect{|p| [p['name'],p['access_token']]}), prompt: "Select Page", class: 'form-control'%>
+              </div>
+            <%end%>
             <div class="form-group">
               <input id="datetimepicker" type="text" name="delay_time">
             </div>

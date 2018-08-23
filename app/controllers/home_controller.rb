@@ -9,18 +9,15 @@ class HomeController < ApplicationController
       @pages = @koala.pages
       @page_posts = @koala.page_feed
     end
-    if current_user.provider == "twitter"
+    if current_user.provider == 'twitter'
       @page_posts = TwitterWrapper.new(current_user).get_timeline
-      # binding.pry
     end
   end
 
   def page_post
     post = Post.create(message: post_params[:message], user: current_user)
-    post_params[:images].each do |image|
-      Image.create(image: image, post: post)
-    end
-    PagePostWorker.perform_in(post_params[:delay_time].to_time, post.id, post_params[:access_token], current_user.token)
+    post_params[:images].each { |image| Image.create(image: image, post: post) } unless post_params[:images].nil?
+    PagePostWorker.perform_in(post_params[:delay_time].to_time, post.id, post_params[:access_token], current_user.as_json)
     redirect_to :home_index
   end
 
