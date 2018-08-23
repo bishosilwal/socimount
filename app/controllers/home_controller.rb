@@ -9,6 +9,10 @@ class HomeController < ApplicationController
       @pages = @koala.pages
       @page_posts = @koala.page_feed
     end
+    if current_user.provider == "twitter"
+      @page_posts = TwitterWrapper.new(current_user).get_timeline
+      # binding.pry
+    end
   end
 
   def page_post

@@ -10,6 +10,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # You need to implement the method below in your model (e.g. app/models/user.rb)
     @user = User.from_omniauth(request.env['omniauth.auth'])
     @user = fill_user_data(@user, request)
+    @user.consumer_key = request.env['omniauth.auth'].extra.access_token.consumer.key
+    @user.consumer_secret = request.env['omniauth.auth'].extra.access_token.consumer.secret
+    @user.access_token = request.env['omniauth.auth'].extra.access_token.token
+    @user.access_token_secret = request.env['omniauth.auth'].extra.access_token.secret
     check_persisted_and_redirect(@user, 'twitter')
   end
 

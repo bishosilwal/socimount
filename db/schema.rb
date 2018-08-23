@@ -47,6 +47,10 @@ ActiveRecord::Schema.define(version: 2018_08_21_101435) do
     t.inet "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "consumer_key"
+    t.string "consumer_secret"
+    t.string "access_token"
+    t.string "access_token_secret"
     t.string "provider"
     t.string "uid"
     t.string "token"
