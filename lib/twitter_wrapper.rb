@@ -2,21 +2,15 @@ class TwitterWrapper
   attr_accessor :client
 
   def initialize(user)
-    if(user.class == User)
-      @client = Twitter::REST::Client.new do |config|
+    if(user.class == Hash)
+      user = OpenStruct.new(user)
+    end
+    @client = Twitter::REST::Client.new do |config|
         config.consumer_key        = user.consumer_key
         config.consumer_secret     = user.consumer_secret
         config.access_token        = user.access_token
         config.access_token_secret = user.access_token_secret
       end
-    elsif(user.class == Hash) 
-      @client = Twitter::REST::Client.new do |config|
-        config.consumer_key        = user['consumer_key']
-        config.consumer_secret     = user['consumer_secret']
-        config.access_token        = user['access_token']
-        config.access_token_secret = user['access_token_secret']
-      end
-    end
   end
 
   def get_timeline

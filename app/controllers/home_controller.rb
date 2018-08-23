@@ -17,7 +17,7 @@ class HomeController < ApplicationController
   def page_post
     post = Post.create(message: post_params[:message], user: current_user)
     post_params[:images].each { |image| Image.create(image: image, post: post) } unless post_params[:images].nil?
-    PagePostWorker.perform_in(post_params[:delay_time].to_time, post.id, post_params[:access_token], current_user.as_json)
+    PagePostWorker.perform_in(post_params[:delay_time].to_time, post.id, post_params[:access_token], current_user.id)
     redirect_to :home_index
   end
 

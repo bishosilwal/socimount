@@ -1,10 +1,9 @@
 class KoalaWrapper
-  attr_accessor :user_token, :graph, :pages
+  attr_accessor :graph, :pages
 
   def initialize(token)
-    @user_token = token
-    @graph = Koala::Facebook::API.new(@user_token)
-    @pages = graph.get_connection('me', 'accounts')
+    @graph = Koala::Facebook::API.new(token)
+    @pages = @graph.get_connection('me', 'accounts')
   end
 
   def page_graph(access_token = @pages.second['access_token'])
