@@ -3,7 +3,6 @@ class HomeController < ApplicationController
   before_action :set_koala, except: [:set_email]
 
   def index
-    binding.pry
     @pages = []
     @page_posts = []
     unless @koala.nil?
@@ -12,6 +11,10 @@ class HomeController < ApplicationController
     end
     if current_user.provider == 'twitter'
       @page_posts = TwitterWrapper.new(current_user).get_timeline
+    end
+    if current_user.provider == 'instagram'
+      @page_posts = @page_posts = InstagramWrapper.new(current_user).get_post
+      render 'home/instagram_home.html.erb'
     end
   end
 

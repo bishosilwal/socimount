@@ -2,10 +2,10 @@
   <div class="row">
     <div class="col">
       <form>
-        <div class="form-group mt-4">
-          <h4>Filter Page:</h4>
-        </div>
         <% if current_user.provider == "facebook"%>
+          <div class="form-group mt-4">
+            <h4>Filter Page:</h4>
+          </div>
           <% @pages.each do |page|%>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="page_token" id="inlineRadio1" value="<%= page['id']%>">
