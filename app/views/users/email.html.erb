@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-6 mt-5">
+      <%= form_tag('/save_email', method: :post) do%>
+        <div class="form-group"> 
+          <%= label_tag 'Please provide an email address to proceed'%>
+          <%= email_field_tag :email,nil, placeholder: "Enter email address", class: 'form-control'%>
+        </div>
+        <div class="form-group">
+          <%= submit_tag "update", class: 'btn btn-primary default-color'%>
+        </div>
+      <%end%>
+    </div>
+  </div>
+  
+</div>

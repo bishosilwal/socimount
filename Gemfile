@@ -31,13 +31,14 @@ gem 'bootstrap', '~> 4.1.3' #!!!!!!!!new gem added for bootstrap_setup
 gem 'jquery-rails'      #!!!!!new gem added for jquery
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
-gem "koala"
+gem 'koala'
 gem 'sidekiq'
-gem "redis", "~> 4.0.2"
+gem 'redis', '~> 4.0.2'
 gem 'dotenv-rails'
-gem "paperclip", "~> 6.0.0"
+gem 'paperclip', '~> 6.0.0'
 gem 'rubocop', require: false
-gem "twitter"
+gem 'twitter'
+gem 'omniauth-instagram'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

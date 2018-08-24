@@ -1,8 +1,9 @@
 class HomeController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_koala
+  before_action :authenticate_user!, except: [:set_email]
+  before_action :set_koala, except: [:set_email]
 
   def index
+    binding.pry
     @pages = []
     @page_posts = []
     unless @koala.nil?
@@ -28,10 +29,20 @@ class HomeController < ApplicationController
     render :index
   end
 
+  def set_email
+    session['omniauth_data']['info']['email'] = params[:email]
+    @user = User.from_omniauth(session['omniauth_data'])
+    @user.provider = session['omniauth_data']['provider']
+    @user.uid = session['omniauth_data']['uid']
+    @user.token = session['omniauth_data']['credentials']['token']
+    @user.save
+    sign_in_and_redirect @user, event: :authentication
+  end
+
   private
 
   def set_koala
-    @koala = KoalaWrapper.new(current_user.token) unless current_user.provider != 'facebook'
+    @koala = KoalaWrapper.new(current_user.token) if current_user.provider == 'facebook'
   end
 
   def post_params

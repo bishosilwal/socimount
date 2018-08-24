@@ -17,6 +17,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     check_persisted_and_redirect(@user, 'twitter')
   end
 
+  def instagram
+    session["omniauth_data"]= request.env["omniauth.auth"]
+    render 'users/email.html.erb'
+  end
+
   def failure
     redirect_to root_path
   end
