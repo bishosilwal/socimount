@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_21_101435) do
+ActiveRecord::Schema.define(version: 2018_08_27_120323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,20 @@ ActiveRecord::Schema.define(version: 2018_08_21_101435) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "user_omniauths", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "provider"
+    t.string "uid"
+    t.string "token"
+    t.string "consumer_key"
+    t.string "consumer_secret"
+    t.string "access_token"
+    t.string "access_token_secret"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_omniauths_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -47,17 +61,11 @@ ActiveRecord::Schema.define(version: 2018_08_21_101435) do
     t.inet "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "consumer_key"
-    t.string "consumer_secret"
-    t.string "access_token"
-    t.string "access_token_secret"
-    t.string "provider"
-    t.string "uid"
-    t.string "token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "images", "posts"
   add_foreign_key "posts", "users"
+  add_foreign_key "user_omniauths", "users"
 end

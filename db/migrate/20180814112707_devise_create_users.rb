@@ -34,10 +34,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
 
 
       t.timestamps null: false
-      t.string :consumer_key
-      t.string :consumer_secret
-      t.string :access_token
-      t.string :access_token_secret
     end
 
     add_index :users, :email,                unique: true
