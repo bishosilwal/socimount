@@ -39,7 +39,7 @@ class KoalaWrapper
 
   def self.page_post(post_id, page_token, user_token)
     post = Post.find(post_id)
-    koala = KoalaService.new(user_token)
+    koala = KoalaWrapper.new(user_token)
     page_graph = koala.page_graph(page_token)
     page_graph.put_wall_post(post.message)
     images_hash = {}
