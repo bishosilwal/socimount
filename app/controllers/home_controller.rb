@@ -3,19 +3,15 @@ class HomeController < ApplicationController
   before_action :set_koala, except: [:set_email]
 
   def index
-    @pages = []
-    @page_posts = []
+    @facebook_pages = []
+    @facebook_page_posts = []
     unless @koala.nil?
-      @pages = @koala.pages
-      @page_posts = @koala.page_feed
+      @facebook_pages = @koala.pages
+      @facebook_page_posts = @koala.page_feed
     end
-    if current_user.provider == 'twitter'
-      @page_posts = TwitterWrapper.new(current_user).get_timeline
-    end
-    if current_user.provider == 'instagram'
-      @page_posts = @page_posts = InstagramWrapper.new(current_user).get_post
-      render 'home/instagram_home.html.erb'
-    end
+    @twitter_page_posts = TwitterWrapper.new(current_user.id).get_timeline unless current_user.user_omniauths.find_by(provider: 'twitter').nil?
+    @instagram_page_posts = @page_posts = InstagramWrapper.new(current_user.id).get_post unless current_user.user_omniauths.find_by(provider: 'instagram').nil?
+    @connected_app = current_user.user_omniauths.pluck(:provider)
   end
 
   def page_post
@@ -26,26 +22,37 @@ class HomeController < ApplicationController
   end
 
   def page_filter
-    @pages = @koala.pages
+    @facebook_pages = @koala.pages
     @page_graph = @koala.page_graph_from_id(params[:page_id])
-    @page_posts = @koala.page_feed(@page_graph)
+    @facebook_page_posts = @koala.page_feed(@page_graph)
     render :index
   end
 
   def set_email
     session['omniauth_data']['info']['email'] = params[:email]
     @user = User.from_omniauth(session['omniauth_data'])
-    @user.provider = session['omniauth_data']['provider']
-    @user.uid = session['omniauth_data']['uid']
-    @user.token = session['omniauth_data']['credentials']['token']
-    @user.save
+    user_omniauth = @user.user_omniauths.find_by(provider: session['omniauth_data']['provider'])
+    if user_omniauth
+      user_omniauth.uid = session['omniauth_data']['uid']
+      user_omniauth.token = session['omniauth_data']['credentials']['token']
+      user_omniauth.save
+    else
+      @user.user_omniauths.create do |user_omniauth|
+        user_omniauth.provider = session['omniauth_data']['provider']
+        user_omniauth.uid = session['omniauth_data']['uid']
+        user_omniauth.token = session['omniauth_data']['credentials']['token']
+      end
+    end
     sign_in_and_redirect @user, event: :authentication
   end
 
   private
 
   def set_koala
-    @koala = KoalaWrapper.new(current_user.token) if current_user.provider == 'facebook'
+    user_omniauth = current_user.user_omniauths.find_by(provider: 'facebook')
+    if user_omniauth
+      @koala = KoalaWrapper.new(user_omniauth.token)
+    end
   end
 
   def post_params

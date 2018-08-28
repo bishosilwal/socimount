@@ -1,15 +1,13 @@
 class TwitterWrapper
   attr_accessor :client
 
-  def initialize(user)
-    if(user.class == Hash)
-      user = OpenStruct.new(user)
-    end
+  def initialize(user_id)
+    user_omniauth = User.find(user_id).user_omniauths.find_by(provider: 'twitter')
     @client = Twitter::REST::Client.new do |config|
-        config.consumer_key        = user.consumer_key
-        config.consumer_secret     = user.consumer_secret
-        config.access_token        = user.access_token
-        config.access_token_secret = user.access_token_secret
+        config.consumer_key        = user_omniauth.consumer_key
+        config.consumer_secret     = user_omniauth.consumer_secret
+        config.access_token        = user_omniauth.access_token
+        config.access_token_secret = user_omniauth.access_token_secret
       end
   end
 

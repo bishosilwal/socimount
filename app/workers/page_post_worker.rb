@@ -7,7 +7,7 @@ class PagePostWorker
     when 'facebook'
       KoalaWrapper.page_post(post_id, page_token, user.token)
     when 'twitter'
-      TwitterWrapper.new(user).post_timeline(post_id)
+      TwitterWrapper.new(user_id).post_timeline(post_id)
     end
   end
 end

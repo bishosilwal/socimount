@@ -1,69 +1,87 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col">
-      <form>
-        <% if current_user.provider == "facebook"%>
-          <div class="form-group mt-4">
-            <h4>Filter Page:</h4>
-          </div>
-          <% @pages.each do |page|%>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="page_token" id="inlineRadio1" value="<%= page['id']%>">
-              <label class="form-check-label" for="inlineRadio1"><%= page["name"]%></label>
-            </div>
-          <%end%>  
-        <%end%>
-      </form>
-    </div>
-    <div class="col-8">
-      <small>Page feed</small>
-      <% if current_user.provider == "facebook"%>
-        <% @page_posts.each do |post|%>
-          <div class="card mt-2">
-            <div class="card-header">
-              <%= post["created_time"]%>
-            </div>
-            <div class="card-body">
-              <h5 class="card-title"><%= truncate(post["message"],length: 200)%></h5>
-              <% unless post["image"].nil?%>
-                <%post["image"].each do |src|%>
-                  <img src="<%=src%>" width="35%" style="display: inline;">
-                <%end%>
-              <%end%>
-              <a href="#" class="btn btn-primary default-color">view</a>
-            </div>
-          </div>
-        <%end%>
-      <%elsif current_user.provider == "twitter"%>
-        <% @page_posts.each do |post|%>
-          <div class="card mt-2">
-            <div class="card-header">
-              <%= post.created_at%>
-            </div>
-            <div class="card-body">
-              <h5 class="card-title"><%= truncate(post.full_text,length: 200)%></h5>
-              <% if post.media? %>
-                <% post.media.each do |media|%>
-
-                  <%#= image_tag(media.media_url.to_s)%>
-                  <img src="<%=media.media_url_https.to_s %>" >
-                <%end%>
-              <%end%>
-              <%# post.to_hash[:entities][:media].first[:media_url]%>
-              <a href="#" class="btn btn-primary default-color">view</a>
-            </div>
-          </div>
-        <%end%>
-      <%end%>    
-    </div>
-    <div class="col">
-      <% if current_user.token.nil?%>
-        <a href="/users/auth/facebook" class="btn btn-primary mt-4 default-color"> Connect Facebook</a>
-      <%else%>
-        <button type="button" class="btn btn-primary mt-4 default-color" data-toggle="modal" data-target="#new_post_modal">
+    <div class="col-12">
+      <button type="button" class="btn btn-primary mt-4 default-color pull-right" data-toggle="modal" data-target="#new_post_modal">
           New post
         </button>
-      <%end%>  
+    </div>
+    <div class="col-4">
+        <h4>Facebook</h4>
+        <%if @connected_app.include? 'facebook'%>
+          <div class="form-check form-check-inline">
+            <h5>Filter Page:</h5>
+            <% @facebook_pages.each do |page|%>
+                <input class="form-check-input" type="radio" name="page_token" id="inlineRadio1" value="<%= page['id']%>">
+                <label class="form-check-label" for="inlineRadio1"><%= page["name"]%></label>
+            <%end%> 
+          </div>
+          <small>Page feed</small>
+          <% @facebook_page_posts.each do |post|%>
+            <div class="card mt-2">
+              <div class="card-header">
+                <%= post["created_time"]%>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title"><%= truncate(post["message"],length: 200)%></h5>
+                <% unless post["image"].nil?%>
+                  <%post["image"].each do |src|%>
+                    <img src="<%=src%>" width="35%" style="display: inline;">
+                  <%end%>
+                <%end%>
+                <a href="#" class="btn btn-primary default-color">view</a>
+              </div>
+            </div>
+          <%end%>
+        <%else%>
+          <a href="/users/auth/facebook">Connect Facebook</a>
+        <%end%>  
+    </div>
+    <div class="col-4">
+      <h4>Twitter</h4>
+      <%if @connected_app.include? 'twitter'%>
+        <%unless @twitter_page_posts.nil?%>
+          <% @twitter_page_posts.each do |post|%>
+            <div class="card mt-2">
+              <div class="card-header">
+                <%= post.created_at%>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title"><%= truncate(post.full_text,length: 200)%></h5>
+                <% if post.media? %>
+                  <% post.media.each do |media|%>
+                    <%= image_tag(media.media_url.to_s)%>
+                    <img src="<%=media.media_url_https.to_s %>" >
+                  <%end%>
+                <%end%>
+                <%# post.to_hash[:entities][:media].first[:media_url]%>
+                <a href="#" class="btn btn-primary default-color">view</a>
+              </div>
+            </div>
+          <%end%>
+        <%end%>
+      <%else%>
+        <a href="/users/auth/twitter">Connect Twitter</a>
+      <%end%>     
+    </div>
+    <div class="col-4">
+      <h4>Instagram</h4>
+      <%if @connected_app.include? 'instagram'%>
+        <%unless @instagram_page_posts.nil?%>
+          <% @instagram_page_posts.data.each do |post|%>
+            <div class="card mt-2">
+              <div class="card-header">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title"> <%= post.caption.text unless post.caption.nil? %></h5>
+                <img src="<%= post.images.low_resolution.url %>" width="320" height="320">
+                <a href="#" class="btn btn-primary default-color">view</a>
+              </div>
+            </div>
+          <%end %> 
+        <%end%> 
+      <%else%>
+        <a href="/users/auth/instagram">Connect Instagram</a>
+      <%end%>    
     </div>
   </div>
 </div>
@@ -81,12 +99,12 @@
         <div class="row">
 
           <%= form_tag("/page_post", method: "post", multipart: true, class: 'col-12') do %>
-            <% if current_user.provider == "facebook" %>
+            <%# if current_user.provider == "facebook" %>
               <div class="form-group">
                 <%= label_tag(:access_token, "Page:") %>
-                <%= select_tag "access_token", options_for_select(@pages.collect{|p| [p['name'],p['access_token']]}), prompt: "Select Page", class: 'form-control'%>
+                <%= select_tag "access_token", options_for_select(@facebook_pages.collect{|p| [p['name'],p['access_token']]}), prompt: "Select Page", class: 'form-control'%>
               </div>
-            <%end%>
+            <%#end%>
             <div class="form-group">
               <input id="datetimepicker" type="text" name="delay_time">
             </div>

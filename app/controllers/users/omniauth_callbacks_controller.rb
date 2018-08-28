@@ -8,13 +8,15 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def twitter
     # You need to implement the method below in your model (e.g. app/models/user.rb)
-    @user = User.from_omniauth(request.env['omniauth.auth'])
-    @user = fill_user_data(@user, request)
-    @user.consumer_key = request.env['omniauth.auth'].extra.access_token.consumer.key
-    @user.consumer_secret = request.env['omniauth.auth'].extra.access_token.consumer.secret
-    @user.access_token = request.env['omniauth.auth'].extra.access_token.token
-    @user.access_token_secret = request.env['omniauth.auth'].extra.access_token.secret
-    check_persisted_and_redirect(@user, 'twitter')
+    user = User.from_omniauth(request.env['omniauth.auth'])
+    user = fill_user_data(user, request)
+    user_omniauth = user.user_omniauths.find_by(provider: request.env['omniauth.auth'].provider)
+    user_omniauth.consumer_key = request.env['omniauth.auth'].extra.access_token.consumer.key
+    user_omniauth.consumer_secret = request.env['omniauth.auth'].extra.access_token.consumer.secret
+    user_omniauth.access_token = request.env['omniauth.auth'].extra.access_token.token
+    user_omniauth.access_token_secret = request.env['omniauth.auth'].extra.access_token.secret
+    user_omniauth.save!
+    check_persisted_and_redirect(user, 'twitter')
   end
 
   def instagram
@@ -39,9 +41,19 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def fill_user_data(user, request)
-    user.provider = request.env['omniauth.auth'].provider
-    user.uid = request.env['omniauth.auth'].uid
-    user.token = request.env['omniauth.auth'].credentials.token
+    user_omniauth = user.user_omniauths.find_by(provider: request.env['omniauth.auth'].provider)
+    if user_omniauth
+      user_omniauth.update(
+        uid: request.env['omniauth.auth'].uid,
+        token: request.env['omniauth.auth'].credentials.token
+        )
+    else
+      user.user_omniauths.create(
+        provider: request.env['omniauth.auth'].provider, 
+        uid: request.env['omniauth.auth'].uid,
+        token: request.env['omniauth.auth'].credentials.token
+        )
+    end
     user
   end
 end
