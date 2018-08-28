@@ -1,17 +1,17 @@
 class HomeController < ApplicationController
   before_action :authenticate_user!, except: [:set_email]
-  before_action :set_koala, except: [:set_email]
+  before_action :set_wrapper, except: [:set_email]
 
   def index
     @facebook_pages = []
     @facebook_page_posts = []
-    unless @koala.nil?
-      @facebook_pages = @koala.pages
-      @facebook_page_posts = @koala.page_feed
+    unless @facebook.nil?
+      @facebook_pages = @facebook.pages
+      @facebook_page_posts = @facebook.page_feed
     end
-    @twitter_page_posts = TwitterWrapper.new(current_user.id).get_timeline unless current_user.user_omniauths.find_by(provider: 'twitter').nil?
-    @instagram_page_posts = @page_posts = InstagramWrapper.new(current_user.id).get_post unless current_user.user_omniauths.find_by(provider: 'instagram').nil?
-    @connected_app = current_user.user_omniauths.pluck(:provider)
+    @twitter_page_posts = @twitter.get_timeline unless @twitter.nil?
+    @instagram_page_posts = @page_posts = @instagram.get_post unless @instagram.nil?
+    @connected_app = current_user.providers
   end
 
   def page_post
@@ -22,16 +22,16 @@ class HomeController < ApplicationController
   end
 
   def page_filter
-    @facebook_pages = @koala.pages
-    @page_graph = @koala.page_graph_from_id(params[:page_id])
-    @facebook_page_posts = @koala.page_feed(@page_graph)
+    @facebook_pages = @facebook.pages
+    @page_graph = @facebook.page_graph_from_id(params[:page_id])
+    @facebook_page_posts = @facebook.page_feed(@page_graph)
     render :index
   end
 
   def set_email
     session['omniauth_data']['info']['email'] = params[:email]
     @user = User.from_omniauth(session['omniauth_data'])
-    user_omniauth = @user.user_omniauths.find_by(provider: session['omniauth_data']['provider'])
+    user_omniauth = @user.social_app(provider: session['omniauth_data']['provider'])
     if user_omniauth
       user_omniauth.uid = session['omniauth_data']['uid']
       user_omniauth.token = session['omniauth_data']['credentials']['token']
@@ -48,11 +48,13 @@ class HomeController < ApplicationController
 
   private
 
-  def set_koala
-    user_omniauth = current_user.user_omniauths.find_by(provider: 'facebook')
-    if user_omniauth
-      @koala = KoalaWrapper.new(user_omniauth.token)
-    end
+  def set_wrapper
+    facebook = current_user.social_app('facebook')
+    twitter = current_user.social_app('twitter')
+    instagram = current_user.social_app('instagram')
+    @facebook = KoalaWrapper.new(facebook.token) if facebook
+    @twitter = TwitterWrapper.new(current_user.id) if twitter
+    @instagram = InstagramWrapper.new(current_user.id) if instagram
   end
 
   def post_params

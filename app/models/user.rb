@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: %i[facebook twitter instagram]
   has_many :user_omniauths
-  
+
   def self.from_omniauth(auth)
     if(auth.class == Hash)
       where(email: auth['info']['email']).first_or_create do |user|
@@ -17,5 +17,13 @@ class User < ApplicationRecord
         user.password = Devise.friendly_token[0, 20]
       end
     end
+  end
+
+  def social_app(provider)
+    user_omniauths.find_by(provider: provider)
+  end
+
+  def providers
+    user_omniauths.pluck(:provider)
   end
 end

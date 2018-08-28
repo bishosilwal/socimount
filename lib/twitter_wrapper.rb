@@ -2,7 +2,7 @@ class TwitterWrapper
   attr_accessor :client
 
   def initialize(user_id)
-    user_omniauth = User.find(user_id).user_omniauths.find_by(provider: 'twitter')
+    user_omniauth = User.find(user_id).social_app('twitter')
     @client = Twitter::REST::Client.new do |config|
         config.consumer_key        = user_omniauth.consumer_key
         config.consumer_secret     = user_omniauth.consumer_secret

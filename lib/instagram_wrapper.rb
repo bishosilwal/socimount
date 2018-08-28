@@ -2,7 +2,7 @@ class InstagramWrapper
   attr_accessor :client
 
   def initialize(user_id)
-    user_omniauth = User.find(user_id).user_omniauths.find_by(provider: 'instagram')
+    user_omniauth = User.find(user_id).social_app('instagram')
     @client = InstagramApi.config do |config|
       config.access_token = user_omniauth.token
       config.client_id = ENV['INSTAGRAM_APP_ID']
