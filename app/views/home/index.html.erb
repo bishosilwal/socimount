@@ -99,14 +99,14 @@
         <div class="row">
 
           <%= form_tag("/page_post", method: "post", multipart: true, class: 'col-12') do %>
-            <%# if current_user.provider == "facebook" %>
+            <%if @connected_app.include? 'facebook'%>
               <div class="form-group">
                 <%= label_tag(:access_token, "Page:") %>
                 <%= select_tag "access_token", options_for_select(@facebook_pages.collect{|p| [p['name'],p['access_token']]}), prompt: "Select Page", class: 'form-control'%>
               </div>
-            <%#end%>
+            <%end%>  
             <div class="form-group">
-              <input id="datetimepicker" type="text" name="delay_time">
+              <input id="datetimepicker" type="text" name="delay_time" placeholder="Set time delay">
             </div>
             <div class="form-group">
               <%= label_tag(:message, 'Message:')%>
@@ -115,6 +115,15 @@
             <div class="form-group">
               <%= label_tag(:choose_file,"Image:")%>
               <%= file_field_tag('images[]', multiple: true, accept: 'image/*' )%>
+            </div>
+            <div class="form-group">
+              <%= label_tag(:app, 'Select Apps:')%>&nbsp;
+              <% @connected_app.each do |app|%>
+                <%unless app == "instagram"%>
+                  <%= check_box_tag(app)%>
+                  <%= label_tag(app)%>
+                <%end%>  
+              <%end%>
             </div>
 
             <%= submit_tag("Submit", class: 'btn btn-primary default-color') %>

@@ -17,7 +17,7 @@ class HomeController < ApplicationController
   def page_post
     post = Post.create(message: post_params[:message], user: current_user)
     post_params[:images].each { |image| Image.create(image: image, post: post) } unless post_params[:images].nil?
-    PagePostWorker.perform_in(post_params[:delay_time].to_time, post.id, post_params[:access_token], current_user.id)
+    PagePostWorker.perform_in(post_params[:delay_time].to_time, post.id, current_user.id, worker_params.to_unsafe_h)
     redirect_to :home_index
   end
 
@@ -58,6 +58,10 @@ class HomeController < ApplicationController
   end
 
   def post_params
-    params.permit(:access_token, :message, :delay_time, images: [])
+    params.permit(:message, :delay_time, images: [])
+  end
+
+  def worker_params
+    params.permit(:twitter, :facebook, :access_token)
   end
 end
