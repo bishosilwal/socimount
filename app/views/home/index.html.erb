@@ -70,6 +70,7 @@
           <% @instagram_page_posts.data.each do |post|%>
             <div class="card mt-2">
               <div class="card-header">
+                <%= Time.at(post.created_time.to_i)%>
               </div>
               <div class="card-body">
                 <h5 class="card-title"> <%= post.caption.text unless post.caption.nil? %></h5>
