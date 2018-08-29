@@ -5,7 +5,12 @@ class HomeController < ApplicationController
   def index
     unless @facebook.nil?
       @facebook_pages = @facebook.pages
-      @facebook_page_posts = @facebook.page_feed
+      if(params[:page_id])
+        @page_graph = @facebook.page_graph_from_id(params[:page_id])
+        @facebook_page_posts = @facebook.page_feed(@page_graph)
+      else
+        @facebook_page_posts = @facebook.page_feed
+      end
     end
     @twitter_page_posts = @twitter.get_timeline unless @twitter.nil?
     @instagram_page_posts = @page_posts = @instagram.get_post unless @instagram.nil?
@@ -17,13 +22,6 @@ class HomeController < ApplicationController
     post_params[:images].each { |image| Image.create(image: image, post: post) } unless post_params[:images].nil?
     PagePostWorker.perform_in(post_params[:delay_time].to_time, post.id, current_user.id, worker_params.to_unsafe_h)
     redirect_to :home_index
-  end
-
-  def page_filter
-    @facebook_pages = @facebook.pages
-    @page_graph = @facebook.page_graph_from_id(params[:page_id])
-    @facebook_page_posts = @facebook.page_feed(@page_graph)
-    render :index
   end
 
   def set_email
