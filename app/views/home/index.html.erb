@@ -6,40 +6,60 @@
         </button>
     </div>
     <div class="col-4">
-        <h4>Facebook</h4>
-        <%if @connected_app.include? 'facebook'%>
-          <div class="form-check form-check-inline">
-            <h5>Filter Page:</h5>
-            <% @facebook_pages.each do |page|%>
-                <input class="form-check-input" type="radio" name="page_token" id="inlineRadio1" value="<%= page['id']%>">
-                <label class="form-check-label" for="inlineRadio1"><%= page["name"]%></label>
-            <%end%> 
-          </div>
-          <small>Page feed</small>
-          <% @facebook_page_posts.each do |post|%>
-            <div class="card mt-2">
-              <div class="card-header">
-                <%= post["created_time"]%>
+        <h4 style="display: inline">Facebook</h4>&nbsp; &nbsp;
+          <%if @connected_app.flatten.include? 'facebook'%>
+            <%@connected_app.each do |app|%>
+              <% if app[0] == 'facebook' and app[1] == "inactive"%>
+                <small><a href="/users/auth/facebook">Connect</a></small> <br/>
+              <%end%>
+              <%if app[0] == 'facebook' and app[1] == 'active'%>
+                <small><a href="/disconnect/facebook">Disconnect</a></small><br />
+              <%end%>
+            <%end%>
+            <%if @facebook_pages%>
+              <div class="form-check form-check-inline">
+                <h5>Filter Page:</h5>&nbsp;
+                <% @facebook_pages.each do |page|%>
+                    <input class="form-check-input" type="radio" name="page_token" id="inlineRadio1" value="<%= page['id']%>">
+                    <label class="form-check-label" for="inlineRadio1"><%= page["name"]%></label>
+                <%end%> 
               </div>
-              <div class="card-body">
-                <h5 class="card-title"><%= truncate(post["message"],length: 200)%></h5>
-                <% unless post["image"].nil?%>
-                  <%post["image"].each do |src|%>
-                    <img src="<%=src%>" width="35%" style="display: inline;">
-                  <%end%>
-                <%end%>
-                <a href="#" class="btn btn-primary default-color">view</a>
-              </div>
-            </div>
-          <%end%>
-        <%else%>
-          <a href="/users/auth/facebook">Connect Facebook</a>
-        <%end%>  
+            <%end%>  
+            <small>Page feed</small>
+            <% if @facebook_page_posts %>
+              <% @facebook_page_posts.each do |post|%>
+                <div class="card mt-2">
+                  <div class="card-header">
+                    <%= post["created_time"]%>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title"><%= truncate(post["message"],length: 200)%></h5>
+                    <% if post["image"]%>
+                      <%post["image"].each do |src|%>
+                        <img src="<%=src%>" width="35%" style="display: inline;">
+                      <%end%>
+                    <%end%>
+                    <a href="#" class="btn btn-primary default-color">view</a>
+                  </div>
+                </div>
+              <%end%>
+            <%end%>  
+          <%else%>
+            <a href="/users/auth/facebook">Connect Facebook</a>
+          <%end%>  
     </div>
     <div class="col-4">
-      <h4>Twitter</h4>
-      <%if @connected_app.include? 'twitter'%>
-        <%unless @twitter_page_posts.nil?%>
+      <h4 style="display: inline;">Twitter</h4>&nbsp; &nbsp;
+      <%if @connected_app.flatten.include? 'twitter' %>
+        <%@connected_app.each do |app|%>
+          <% if app[0] == 'twitter' and app[1] == "inactive"%>
+            <small><a href="/users/auth/twitter">Connect</a></small> <br/>
+          <%end%>
+          <%if app[0] == 'twitter' and app[1] == 'active'%>
+            <small><a href="/disconnect/twitter">Disconnect</a></small><br />
+          <%end%>
+        <%end%>
+        <%if @twitter_page_posts%>
           <% @twitter_page_posts.each do |post|%>
             <div class="card mt-2">
               <div class="card-header">
@@ -58,15 +78,23 @@
               </div>
             </div>
           <%end%>
-        <%end%>
+        <%end%>  
       <%else%>
-        <a href="/users/auth/twitter">Connect Twitter</a>
+        <a href="/users/auth/twitter">Connect</a>
       <%end%>     
     </div>
     <div class="col-4">
-      <h4>Instagram</h4>
-      <%if @connected_app.include? 'instagram'%>
-        <%unless @instagram_page_posts.nil?%>
+      <h4 style="display: inline;">Instagram</h4> &nbsp; &nbsp;
+       <%if @connected_app.flatten.include? 'instagram' %>
+        <%@connected_app.each do |app|%>
+          <% if app[0] == 'instagram' and app[1] == "inactive"%>
+            <small><a href="/users/auth/instagram">Connect</a></small> <br/>
+          <%end%>
+          <%if app[0] == 'instagram' and app[1] == 'active'%>
+            <small><a href="/disconnect/instagram">Disconnect</a></small><br />
+          <%end%>
+        <%end%>
+        <%if @instagram_page_posts%>
           <% @instagram_page_posts.data.each do |post|%>
             <div class="card mt-2">
               <div class="card-header">
@@ -81,7 +109,7 @@
           <%end %> 
         <%end%> 
       <%else%>
-        <a href="/users/auth/instagram">Connect Instagram</a>
+        <a href="/users/auth/instagram">Connect </a>
       <%end%>    
     </div>
   </div>
@@ -120,9 +148,9 @@
             <div class="form-group">
               <%= label_tag(:app, 'Select Apps:')%>&nbsp;
               <% @connected_app.each do |app|%>
-                <%unless app == "instagram"%>
-                  <%= check_box_tag(app)%>
-                  <%= label_tag(app)%>
+                <%unless app[0] == "instagram"%>
+                  <%= check_box_tag(app[0])%>
+                  <%= label_tag(app[0])%>
                 <%end%>  
               <%end%>
             </div>

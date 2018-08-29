@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 2018_08_27_120323) do
     t.string "consumer_secret"
     t.string "access_token"
     t.string "access_token_secret"
+    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_omniauths_on_user_id"

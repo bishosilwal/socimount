@@ -9,6 +9,7 @@ class CreateUserOmniauths < ActiveRecord::Migration[5.2]
       t.string :consumer_secret
       t.string :access_token
       t.string :access_token_secret
+      t.integer :status
       t.timestamps
     end
   end

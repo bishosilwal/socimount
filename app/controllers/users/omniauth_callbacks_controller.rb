@@ -45,13 +45,15 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if user_omniauth
       user_omniauth.update(
         uid: request.env['omniauth.auth'].uid,
-        token: request.env['omniauth.auth'].credentials.token
+        token: request.env['omniauth.auth'].credentials.token,
+        status: :active
         )
     else
       user.user_omniauths.create(
         provider: request.env['omniauth.auth'].provider, 
         uid: request.env['omniauth.auth'].uid,
-        token: request.env['omniauth.auth'].credentials.token
+        token: request.env['omniauth.auth'].credentials.token,
+        status: :active
         )
     end
     user

@@ -20,10 +20,14 @@ class User < ApplicationRecord
   end
 
   def social_app(provider)
+    user_omniauths.find_by(provider: provider, status: 'active')
+  end
+
+  def social_app_by_provider(provider)
     user_omniauths.find_by(provider: provider)
   end
 
   def providers
-    user_omniauths.pluck(:provider)
+    user_omniauths.pluck(:provider, :status)
   end
 end
