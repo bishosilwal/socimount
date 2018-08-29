@@ -36,10 +36,9 @@
                     <h5 class="card-title"><%= truncate(post["message"],length: 200)%></h5>
                     <% if post["image"]%>
                       <%post["image"].each do |src|%>
-                        <img src="<%=src%>" width="35%" style="display: inline;">
+                        <img src="<%=src%>" width="320" height="320" style="display: inline;">
                       <%end%>
                     <%end%>
-                    <a href="#" class="btn btn-primary default-color">view</a>
                   </div>
                 </div>
               <%end%>
@@ -74,7 +73,6 @@
                   <%end%>
                 <%end%>
                 <%# post.to_hash[:entities][:media].first[:media_url]%>
-                <a href="#" class="btn btn-primary default-color">view</a>
               </div>
             </div>
           <%end%>
@@ -103,7 +101,6 @@
               <div class="card-body">
                 <h5 class="card-title"> <%= post.caption.text unless post.caption.nil? %></h5>
                 <img src="<%= post.images.low_resolution.url %>" width="320" height="320">
-                <a href="#" class="btn btn-primary default-color">view</a>
               </div>
             </div>
           <%end %> 
