@@ -7,6 +7,15 @@
 * post in page with multiple image upload support
 * set time to post, which will used to post in social app after time delayed
 
+2. Twitter
+* see twitter feed data 
+* post in twitter with multiple image upload support
+* set time to post, which will used to post in social app after time delayed
+
+3. Instagram
+* see instagram feed data with images
+
+
 ### App Requirement
 * Ruby 2.4.2 
 * Rails 5.2.1
