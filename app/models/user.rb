@@ -3,7 +3,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: %i[facebook twitter instagram]
-  has_many :user_omniauths
+  has_many :user_omniauths, dependent: :destroy
+  has_many :posts, dependent: :destroy
 
   def self.from_omniauth(auth)
     if(auth.class == Hash)
