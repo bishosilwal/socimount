@@ -6,14 +6,17 @@
 * see page feed data with images
 * post in page with multiple image upload support
 * set time to post, which will used to post in social app after time delayed
+* see total likes and comment
 
 2. Twitter
 * see twitter feed data 
 * post in twitter with multiple image upload support
 * set time to post, which will used to post in social app after time delayed
+* see total retweet and like 
 
 3. Instagram
 * see instagram feed data with images
+* see total likes and comments
 
 
 ### App Requirement

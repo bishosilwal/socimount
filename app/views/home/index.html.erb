@@ -135,6 +135,10 @@
                 <h5 class="card-title"> <%= post.caption.text unless post.caption.nil? %></h5>
                 <img src="<%= post.images.low_resolution.url %>" width="320" height="320">
               </div>
+              <div class="card-footer">
+                <i class="fas fa-heart" style="color: #563d7c;"> &nbsp;<%= post['likes']['count']%></i>
+                <i class="fas fa-comment-dots float-right" style="color: #563d7c;">&nbsp;<%= post['comments']['count']%></i>
+              </div>
             </div>
           <%end %> 
         <%end%> 
