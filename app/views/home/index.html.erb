@@ -29,7 +29,7 @@
               <% @facebook_page_posts.each do |post|%>
                 <div class="card mt-2">
                   <div class="card-header">
-                    <%= post["created_time"]%>
+                     <label class="font-weight-light float-right" style="font-size: 0.8rem;"><%= DateTime.parse(post["created_time"]).strftime("%e %b %Y")%></label>
                   </div>
                   <div class="card-body">
                     <h5 class="card-title"><%= truncate(post["message"],length: 200)%></h5>
@@ -82,8 +82,15 @@
         <%if @twitter_page_posts%>
           <% @twitter_page_posts.each do |post|%>
             <div class="card mt-2">
-              <div class="card-header">
-                <%= post.created_at%>
+              <div class="card-header twitter-card-head">
+                <label style="color: #563d7c;">
+                <%if post.user_mentions.empty?%>
+                  <%=post.user.name %>
+                <%else%>
+                  <%= post.user_mentions.first.name%>
+                <%end%>
+                </label>
+                <label class="font-weight-light float-right" style="font-size: 0.8rem;"><%= DateTime.parse(post.created_at.to_s).strftime("%e %b %Y")%></label>
               </div>
               <div class="card-body">
                 <h5 class="card-title"><%= truncate(post.full_text,length: 200)%></h5>
@@ -94,6 +101,10 @@
                   <%end%>
                 <%end%>
                 <%# post.to_hash[:entities][:media].first[:media_url]%>
+              </div>
+              <div class="card-footer">
+                <i class="fas fa-retweet" style="color: #563d7c;"> &nbsp; <%= post.retweeted_status.retweet_count%></i>&nbsp;&nbsp;
+                <i class="fas fa-heart" style="color: #563d7c;"> &nbsp;<%= post.retweeted_status.favorite_count%></i>
               </div>
             </div>
           <%end%>
@@ -117,7 +128,8 @@
           <% @instagram_page_posts.data.each do |post|%>
             <div class="card mt-2">
               <div class="card-header">
-                <%= Time.at(post.created_time.to_i)%>
+                 <label class="font-weight-light float-right" style="font-size: 0.8rem;"><%= DateTime.parse(Time.at(post.created_time.to_i).to_s).strftime("%e %b %Y")%></label>
+                <%#= Time.at(post.created_time.to_i)%>
               </div>
               <div class="card-body">
                 <h5 class="card-title"> <%= post.caption.text unless post.caption.nil? %></h5>
