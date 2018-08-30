@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      <button type="button" class="btn btn-primary mt-4 default-color pull-right" data-toggle="modal" data-target="#new_post_modal">
+      <button type="button" class="btn btn-primary mt-4 default-color float-right" data-toggle="modal" data-target="#new_post_modal">
           New post
         </button>
     </div>
@@ -21,11 +21,10 @@
                 <h5>Filter Page:</h5>&nbsp;
                 <% @facebook_pages.each do |page|%>
                     <input class="form-check-input" type="radio" name="page_token" id="inlineRadio1" value="<%= page['id']%>">
-                    <label class="form-check-label" for="inlineRadio1"><%= page["name"]%></label>
+                    <label class="form-check-label" for="inlineRadio1"><%= page["name"]%></label>&nbsp;&nbsp;
                 <%end%> 
               </div>
             <%end%>  
-            <small>Page feed</small>
             <% if @facebook_page_posts %>
               <% @facebook_page_posts.each do |post|%>
                 <div class="card mt-2">
@@ -41,10 +40,28 @@
                     <%end%>
                   </div>
                   <div class="card-footer">
-                    <i class="fas fa-thumbs-up " style="color: #563d7c;"><%= post['likes']%></i>
+                    <i class="fas fa-thumbs-up " style="color: #563d7c;">&nbsp; &nbsp;<%= post['likes']%></i>
+                    <i class="fas fa-comment-dots float-right" style="color: #563d7c;">&nbsp; &nbsp;<%= post['comments'].length%></i>
                   </div>
-
                 </div>
+                <%unless post['comments'].empty?%>
+                    <div class="alert alert-light">
+                      <ul style="font-size: 0.7rem;">
+                        <% post['comments'].each do |comment| %>
+                          <li>
+                            <%if comment['from'].nil?%>
+                              <%= comment['message'] %>
+                            <%else%>
+                              <%= comment['from']['name'] %>
+                              <ul>
+                                <li> <%= comment['message'] %> </li>
+                              </ul>
+                            <%end%>
+                          </li>  
+                        <%end%>
+                      </ul>
+                  </div>
+                <%end%>  
               <%end%>
             <%end%>  
           <%else%>
