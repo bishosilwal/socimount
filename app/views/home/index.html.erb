@@ -28,8 +28,8 @@
             <% if @facebook_page_posts %>
               <% @facebook_page_posts.each do |post|%>
                 <div class="card mt-2">
-                  <div class="card-header">
-                     <label class="font-weight-light float-right" style="font-size: 0.8rem;"><%= DateTime.parse(post["created_time"]).strftime("%e %b %Y")%></label>
+                  <div class="card-header card-head default-color">
+                     <label class="font-weight-light float-right text-white" style="font-size: 0.8rem;"><%= DateTime.parse(post["created_time"]).strftime("%e %b %Y")%></label>
                   </div>
                   <div class="card-body">
                     <h5 class="card-title"><%= truncate(post["message"],length: 200)%></h5>
@@ -82,15 +82,15 @@
         <%if @twitter_page_posts%>
           <% @twitter_page_posts.each do |post|%>
             <div class="card mt-2">
-              <div class="card-header twitter-card-head">
-                <label style="color: #563d7c;">
+              <div class="card-header card-head default-color">
+                <label class="text-white">
                 <%if post.user_mentions.empty?%>
                   <%=post.user.name %>
                 <%else%>
                   <%= post.user_mentions.first.name%>
                 <%end%>
                 </label>
-                <label class="font-weight-light float-right" style="font-size: 0.8rem;"><%= DateTime.parse(post.created_at.to_s).strftime("%e %b %Y")%></label>
+                <label class="font-weight-light float-right text-white" style="font-size: 0.8rem;"><%= DateTime.parse(post.created_at.to_s).strftime("%e %b %Y")%></label>
               </div>
               <div class="card-body">
                 <h5 class="card-title"><%= truncate(post.full_text,length: 200)%></h5>
@@ -127,8 +127,8 @@
         <%if @instagram_page_posts%>
           <% @instagram_page_posts.data.each do |post|%>
             <div class="card mt-2">
-              <div class="card-header">
-                 <label class="font-weight-light float-right" style="font-size: 0.8rem;"><%= DateTime.parse(Time.at(post.created_time.to_i).to_s).strftime("%e %b %Y")%></label>
+              <div class="card-header card-head default-color">
+                 <label class="font-weight-light float-right text-white" style="font-size: 0.8rem;"><%= DateTime.parse(Time.at(post.created_time.to_i).to_s).strftime("%e %b %Y")%></label>
                 <%#= Time.at(post.created_time.to_i)%>
               </div>
               <div class="card-body">
