@@ -1,3 +1,4 @@
+<a href="https://ibb.co/fHXBWSy"><img src="https://i.ibb.co/GRdBDJ8/Screenshot-from-2018-08-30-17-23-27.png" alt="Screenshot-from-2018-08-30-17-23-27" border="0"></a>
 # Social Site's page management app
  Primary focus of this app is to be a single platform for multiple social app page/group management(like: [buffer_link](https://www.buffer.com) ). Till now user can manage post of facebook only ,gradually other social app will also integerated.
 
