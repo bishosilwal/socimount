@@ -3,11 +3,14 @@ class HomeController < ApplicationController
   before_action :set_wrapper, except: [:set_email]
 
   def index
-    @facebook_pages = []
-    @facebook_page_posts = []
     unless @facebook.nil?
       @facebook_pages = @facebook.pages
-      @facebook_page_posts = @facebook.page_feed
+      if(params[:page_id])
+        @page_graph = @facebook.page_graph_from_id(params[:page_id])
+        @facebook_page_posts = @facebook.page_feed(@page_graph)
+      else
+        @facebook_page_posts = @facebook.page_feed
+      end
     end
     @twitter_page_posts = @twitter.get_timeline unless @twitter.nil?
     @instagram_page_posts = @page_posts = @instagram.get_post unless @instagram.nil?
@@ -21,29 +24,29 @@ class HomeController < ApplicationController
     redirect_to :home_index
   end
 
-  def page_filter
-    @facebook_pages = @facebook.pages
-    @page_graph = @facebook.page_graph_from_id(params[:page_id])
-    @facebook_page_posts = @facebook.page_feed(@page_graph)
-    render :index
-  end
-
   def set_email
     session['omniauth_data']['info']['email'] = params[:email]
     @user = User.from_omniauth(session['omniauth_data'])
-    user_omniauth = @user.social_app(provider: session['omniauth_data']['provider'])
+    user_omniauth = @user.social_app_by_provider(session['omniauth_data']['provider'])
     if user_omniauth
       user_omniauth.uid = session['omniauth_data']['uid']
       user_omniauth.token = session['omniauth_data']['credentials']['token']
+      user_omniauth.status = :active
       user_omniauth.save
     else
       @user.user_omniauths.create do |user_omniauth|
         user_omniauth.provider = session['omniauth_data']['provider']
         user_omniauth.uid = session['omniauth_data']['uid']
         user_omniauth.token = session['omniauth_data']['credentials']['token']
+        user_omniauth.status = :active
       end
     end
     sign_in_and_redirect @user, event: :authentication
+  end
+
+  def disconnect
+    current_user.social_app(params[:provider]).update(status: :inactive)
+    redirect_to :home_index
   end
 
   private

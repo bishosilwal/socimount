@@ -3,7 +3,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: %i[facebook twitter instagram]
-  has_many :user_omniauths
+  has_many :user_omniauths, dependent: :destroy
+  has_many :posts, dependent: :destroy
 
   def self.from_omniauth(auth)
     if(auth.class == Hash)
@@ -20,10 +21,14 @@ class User < ApplicationRecord
   end
 
   def social_app(provider)
+    user_omniauths.find_by(provider: provider, status: 'active')
+  end
+
+  def social_app_by_provider(provider)
     user_omniauths.find_by(provider: provider)
   end
 
   def providers
-    user_omniauths.pluck(:provider)
+    user_omniauths.pluck(:provider, :status)
   end
 end

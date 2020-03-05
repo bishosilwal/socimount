@@ -18,22 +18,28 @@ class KoalaWrapper
   def page_feed(graph = page_graph)
     posts = graph.get_connection('me', 'feed')
     posts.each_with_index do |post, index|
-      attachments = graph.get_connection(post['id'], 'attachments')
-      unless attachments.empty?
-        attachments.each do |attachment|
-          if attachment['subattachments'].nil?
-            posts[index]['image'] = [attachment['media']['image']['src']]
-          else
-            attachment['subattachments']['data'].each_with_index do |subattachment, index1|
+      post_summary = graph.get_object(post['id'], fields: 'likes.summary(true),attachments,comments.summary(true)')
+      if post_summary['attachments']
+        post_summary['attachments']['data'].each_with_index do |attachment, index1|
+          if attachment['subattachments']
+            attachment['subattachments']['data'].each_with_index do |subattachment, index2|
               if posts[index]['image'].nil?
                 posts[index]['image'] = [subattachment['media']['image']['src']]
               else
                 posts[index]['image'] << subattachment['media']['image']['src']
               end
             end
-          end
+          else
+            if posts[index]['image'].nil?
+              posts[index]['image'] = [attachment['media']['image']['src']]
+            else
+              posts[index]['image'] << attachment['media']['image']['src']
+            end
+          end  
         end
       end
+      posts[index]['likes'] = post_summary['likes']['summary']['total_count']
+      posts[index]['comments'] = post_summary['comments']['data']
     end
   end
 

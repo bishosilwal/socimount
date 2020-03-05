@@ -1,6 +1,6 @@
 $(document).ready(function(){
   $('input[type=radio][name=page_token]').change(function() {
-    window.location.href = "http://localhost:3000/page_filter?page_id="+this.value;
+    window.location.href = "http://localhost:3000/home/index?page_id="+this.value;
   });
   $.datetimepicker.setDateFormatter({
       parseDate: function (date, format) {
